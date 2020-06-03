@@ -1,0 +1,100 @@
+Project tinyTicket {
+  database_type: 'MySQL'
+  Note: '''
+
+    v0.1 - 2020-06-03
+
+    This schema can be loaded into dbdiagram.io
+    and be exported into PostgreSQL, MySQL order
+    MS-SQL DDL.
+  '''
+}
+
+Table provinces {
+  id smallint [pk, increment, not null, unique]
+  name varchar(50) [not null, unique]
+  abbreviation char(2) [unique]
+}
+
+Table cities {
+  id integer [pk, increment, not null, unique]
+  name varchar(100) [not null]
+  province smallint [not null]
+}
+
+Table venues {
+  id integer [pk, increment, not null, unique]
+  name varchar(150) [not null, unique]
+  description varchar(500)
+  max_capacity smallint [not null]
+  url_info varchar(100)
+  address varchar(300) [not null]
+  city integer [not null]
+  lat real [not null]
+  long real [not null]
+}
+
+table users {
+  id integer [pk, not null]
+  first_name varchar(30) [not null]
+  last_name varchar(150) [not null]
+  email varchar(200) [not null, unique]
+  phone varchar(15)
+  dt_registered timestamp [default: `now()`]
+  dt_last_login timestamp [null]
+  handle char(10) [not null, unique]
+}
+
+table events{
+  id integer [not null, pk]
+  venue integer [not null]
+  name varchar(150)
+  description varchar(500) [not null]
+  qt_tickets smallint [not null]
+  max_per_user tinyint [default: 2]
+}
+
+table event_charges{
+  event integer [not null]
+  id integer [not null]
+  value decimal (7,2) [not null]
+  payment_date datetime [default: `now()`]
+  receipt blob
+  indexes {
+    (event, id) [pk]
+  }
+  
+  note: 'Lists the values, payment date and 
+  receipt per event when applicable. This table was
+  added to help event organizers with
+  traceability and transparency.'
+}
+
+table orders {
+  id integer [pk, not null]
+  created timestamp [default: `now()`]
+  user integer [not null]
+}
+
+table order_items {
+  order integer [not null]
+  id integer [not null]
+  event integer [not null]
+  value decimal(6, 2)
+  qty tinyint [not null, default: 1]
+  indexes {
+    (order, id) [pk]
+  }
+}
+
+ref:events.id < order_items.event
+ref:events.id < event_charges.event
+
+ref:orders.id < order_items.order
+
+ref:venues.id < events.venue
+ref:cities.id < venues.city
+
+ref:provinces.id < cities.province
+
+ref:users.id < orders.user
