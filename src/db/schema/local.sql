@@ -1,5 +1,5 @@
 -- Canadian provinces
-INSERT INTO tmp.provinces (name, abbreviation) VALUES
+INSERT INTO provinces (name, abbreviation) VALUES
   ('Alberta', 'AB'),
   ('British Columbia', 'BC'),
   ('Manitoba', 'MN'),
@@ -13,3 +13,7 @@ INSERT INTO tmp.provinces (name, abbreviation) VALUES
   ('Quebec', 'QC'),
   ('Saskatchewan', 'SK'),
   ('Yukon', 'YT');
+
+  -- Cities: Calgary
+INSERT INTO cities (name, province) VALUES
+  SELECT 'Calgary', id FROM provinces WHERE name = 'Alberta';

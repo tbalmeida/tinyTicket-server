@@ -30,8 +30,9 @@ Table venues {
   url_info varchar(100)
   address varchar(300) [not null]
   city integer [not null]
-  lat real [not null]
-  long real [not null]
+  latitude real [null]
+  longitude real [null]
+  active boolean [default: true]
 }
 
 table users {
