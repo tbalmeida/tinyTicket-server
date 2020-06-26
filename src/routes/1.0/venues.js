@@ -35,12 +35,11 @@ module.exports = (pool) => {
           req.body.active      
       ],
       function (error, results) {
-        console.log(results);
         if (error) {
           console.log('POST/venues', error.code, error.sqlMessage);
           res.status(500).send({msg: 'Server error. Please, verify the information provided.', code: error.code, err_msg: error.sqlMessage});
         } else {
-          res.status(201).results({msg: `${results.length} venue created succefully.`});
+          res.status(201).send({msg: `${results.affectedRows} venue created succefully.`});
         }
       });
   });
