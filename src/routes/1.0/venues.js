@@ -4,7 +4,7 @@ const router = require("express").Router();
 const SQL_VENUES = 'SELECT * FROM venues ORDER BY name ASC';
 const SQL_VENUE_ID = 'SELECT * FROM venues where id = ?';
 const SQL_VENUE_ADD = 'INSERT INTO venues(name, description, max_capacity, url_info, address, city, latitude, longitude, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-
+const SQL_VENUE_DEL = 'DELETE FROM venues WHERE id = ?';
 
 module.exports = (pool) => {
   // route to get all the venues
@@ -38,9 +38,9 @@ module.exports = (pool) => {
         console.log(results);
         if (error) {
           console.log('POST/venues', error.code, error.sqlMessage);
-          res.status(500).send({msg: 'Server error. Please, verify the information provided.', code: error.code, err_msg: error.sqlMessage})
+          res.status(500).send({msg: 'Server error. Please, verify the information provided.', code: error.code, err_msg: error.sqlMessage});
         } else {
-          res.status(201).results({msg: `${results.length} venue created succefully.`})
+          res.status(201).results({msg: `${results.length} venue created succefully.`});
         }
       });
   });
@@ -49,15 +49,23 @@ module.exports = (pool) => {
    router.get('/venues/:id', (req, res) => {
     pool.query(SQL_VENUE_ID, [req.params.id], function (error, results) {
       if (error) {
-        console.log('GET/venues', error.code, error.sqlMessage);
-        res.status(500).send({msg: 'Server error, try again later.', code: error.code, err_msg: error.sqlMessage})
+        console.log('GET/venues/:id', error.code, error.sqlMessage);
+        res.status(500).send({msg: 'Server error, try again later.', code: error.code, err_msg: error.sqlMessage});
       } else {
         const qFound = results.length;
-        res.status(200).json(results)
+        res.status(200).json(results);
       }
     });
   });
 
+     // route to get one venue by code
+     router.delete('/venues/:id', (req, res) => {
+      pool.query(SQL_VENUE_DEL, [req.params.id], function (error, results) {
+        const qAffected = results.affectedRows;
+        console.log("Affected:", qAffected, qAffected !== 0);
+        qAffected !== 0 ? res.status(201).send({msg: `${qAffected} venue(s) deleted.`}) : res.status(404).send({msg: 'Venue not found'});
+      });
+    });
+  
   return router;
 };
-
