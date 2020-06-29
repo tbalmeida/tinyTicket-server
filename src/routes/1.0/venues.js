@@ -3,8 +3,10 @@ const router = require("express").Router();
 // All queries used for venues are listed here
 const SQL_VENUES = 'SELECT * FROM venues ORDER BY name ASC';
 const SQL_VENUE_ID = 'SELECT * FROM venues where id = ?';
-const SQL_VENUE_ADD = 'INSERT INTO venues(name, description, max_capacity, url_info, address, city, latitude, longitude, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 const SQL_VENUE_DEL = 'DELETE FROM venues WHERE id = ?';
+const SQL_VENUE_ADD = 'INSERT INTO venues(name, description, max_capacity, url_info, address, city, latitude, longitude, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+const SQL_VENUE_UPD = `UPDATE venues SET name = ?, description = ?, max_capacity = ?, url_info = ?, address = ?, city = ?, latitude = ?, longitude = ?, active = ? 
+  WHERE id = ?`;
 
 module.exports = (pool) => {
   // route to get all the venues
@@ -39,7 +41,7 @@ module.exports = (pool) => {
           console.log('POST/venues', error.code, error.sqlMessage);
           res.status(500).send({msg: 'Server error. Please, verify the information provided.', code: error.code, err_msg: error.sqlMessage});
         } else {
-          res.status(201).send({msg: `${results.affectedRows} venue created succefully.`});
+          res.status(201).send({msg: `${results.affectedRows} venue created.`});
         }
       });
   });
@@ -65,6 +67,32 @@ module.exports = (pool) => {
         qAffected !== 0 ? res.status(201).send({msg: `${qAffected} venue(s) deleted.`}) : res.status(404).send({msg: 'Venue not found'});
       });
     });
+
+    // update a venue
+    router.patch('/venues/:id', (req, res) => {
+      pool.query(SQL_VENUE_UPD, 
+        [
+            req.body.name,
+            req.body.description,
+            req.body.max_capacity,
+            req.body.url_info,
+            req.body.address,
+            req.body.city,
+            req.body.lat,
+            req.body.long,
+            req.body.active,
+            req.params.id    
+        ],
+        function (error, results) {
+          console.log("affected ", results.affectedRows)
+          if (error) {
+            console.log('PATCH/venues', error.code, error.sqlMessage);
+            res.status(500).send({msg: 'Server error. Please, verify the information provided.', code: error.code, err_msg: error.sqlMessage});
+          } else {
+            results.affectedRows === 1 ? res.status(200).send({msg: `${results.affectedRows} venue updated.`}) : res.status(404).send({msg: 'Venue not found'});
+          }
+        });
+      })
   
   return router;
 };
