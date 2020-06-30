@@ -6,6 +6,7 @@ const SQL_PROVINCE_ID = 'SELECT * FROM provinces where id = ?';
 const SQL_PROVINCE_DEL = 'DELETE FROM provinces WHERE id = ?';
 const SQL_PROVINCE_ADD = 'INSERT INTO provinces(name, abbreviation) VALUES (?, ?)';
 const SQL_PROVINCE_UPD = 'UPDATE provinces SET name = ?, abbreviation = ? WHERE id = ?';
+const SQL_PROVINCE_CITIES = 'SELECT * FROM vw_cities WHERE id_province = ? ORDER BY city ASC';
 
 module.exports = (pool) => {
   // route to get all the provinces
@@ -41,6 +42,19 @@ module.exports = (pool) => {
   // route to get one venue by code
   router.get('/provinces/:id', (req, res) => {
     pool.query(SQL_PROVINCE_ID, [req.params.id], function (error, results) {
+      if (error) {
+        console.log('GET/provinces/:id', error.code, error.sqlMessage);
+        res.status(500).send({msg: 'Server error, try again later.', code: error.code, err_msg: error.sqlMessage});
+      } else {
+        const qFound = results.length;
+        res.status(200).json(results);
+      }
+    });
+  });
+
+  // route to get one venue by code
+  router.get('/provinces/:id/cities', (req, res) => {
+    pool.query(SQL_PROVINCE_CITIES, [req.params.id], function (error, results) {
       if (error) {
         console.log('GET/provinces/:id', error.code, error.sqlMessage);
         res.status(500).send({msg: 'Server error, try again later.', code: error.code, err_msg: error.sqlMessage});
