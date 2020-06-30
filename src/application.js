@@ -10,6 +10,7 @@ const app = express();
 const pool = require("./db");
 
 const venues = require("./routes/1.0/venues");
+const provinces = require("./routes/1.0/provinces");
 // const events = require("./routes/v1.0/events");
 // const users  = require("./routes/v1.0/users");
 // const orders = require("./routes/v1.0/orders");
@@ -38,8 +39,8 @@ module.exports = function application(
   app.use(bodyparser.json());
 
   app.use('/api/1.0/', venues(pool));
+  app.use("/api/1.0/", provinces(pool));
 
-  // app.use("/api/1.0/", venues(db));
   // app.use("/api/1.0/", events(db));
   // app.use("/api/1.0/", users(db) );
   // app.use("/api/1.0/", orders(db));
