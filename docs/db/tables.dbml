@@ -48,11 +48,13 @@ table users {
 
 table events{
   id integer [not null, pk]
-  venue integer [not null]
   name varchar(150)
   description varchar(500) [not null]
+  venue integer [not null]
   qt_tickets smallint [not null]
   max_per_user tinyint [default: 2]
+  ticket_price decimal (5,2) [not null, default: 0]
+  handle char(10) [null]
 }
 
 table event_charges{
