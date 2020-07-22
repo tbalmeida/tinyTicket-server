@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 // All queries used for cities are listed here
-const SQL_EVENT_ADD = 'INSERT INTO events(name, description, date_time, venue, qt_tickets, max_per_user, vl_ticket) VALUES (?, ?, ?, ?, ?, ?, ?)';
+const SQL_EVENT_ADD = 'INSERT INTO events(name, description, date_time, venue, qt_tickets, max_per_user, ticket_price) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
 module.exports = (pool) => {
   router.post('/events', (req, res) => {
@@ -13,7 +13,7 @@ module.exports = (pool) => {
           req.body.venue,
           req.body.qt_tickets,
           req.body.max_per_user,
-          req.body.vl_ticket
+          req.body.ticket_price
       ],
       function (error, results) {
         if (error) {
