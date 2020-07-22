@@ -4,9 +4,10 @@ const router = require("express").Router();
 const SQL_VENUES = 'SELECT * FROM venues ORDER BY name ASC';
 const SQL_VENUE_ID = 'SELECT * FROM venues where id = ?';
 const SQL_VENUE_DEL = 'DELETE FROM venues WHERE id = ?';
-const SQL_VENUE_ADD = 'INSERT INTO venues(name, description, max_capacity, url_info, address, city, latitude, longitude, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-const SQL_VENUE_UPD = `UPDATE venues SET name = ?, description = ?, max_capacity = ?, url_info = ?, address = ?, city = ?, latitude = ?, longitude = ?, active = ? 
-  WHERE id = ?`;
+const SQL_VENUE_ADD = 'INSERT INTO venues(name, description, max_capacity, url_info, address, city, latitude, longitude, active) ' + 
+  'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+const SQL_VENUE_UPD = 'UPDATE venues SET name = ?, description = ?, max_capacity = ?, url_info = ?, address = ?, city = ?, ' +
+  'latitude = ?, longitude = ?, active = ? WHERE id = ?';
 
 module.exports = (pool) => {
   // route to get all the venues
