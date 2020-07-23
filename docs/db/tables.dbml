@@ -48,7 +48,7 @@ table users {
 
 table events{
   id integer [not null, pk]
-  name varchar(150)
+  title varchar(150)
   description varchar(500) [not null]
   venue integer [not null]
   qt_tickets smallint [not null]

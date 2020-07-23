@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `venues` (
 );
 CREATE TABLE IF NOT EXISTS `events` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) DEFAULT NULL,
+  `title` varchar(150) DEFAULT NULL,
   `date_time` datetime NOT NULL,
   `venue` int NOT NULL,
   `description` varchar(500) NOT NULL,
