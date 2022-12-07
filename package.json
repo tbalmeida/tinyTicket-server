@@ -28,9 +28,9 @@
   "homepage": "https://github.com/tbalmeida/tinyTicket-server#readme",
   "dependencies": {
     "@sendgrid/mail": "^7.1.1",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "helmet": "^3.22.0",
     "mysql": "^2.18.1",
     "pdfkit": "^0.11.0"
